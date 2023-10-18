@@ -1,4 +1,4 @@
-package vars
+package utils
 
 import (
 	"net"

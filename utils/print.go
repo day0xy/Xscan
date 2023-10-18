@@ -1,4 +1,4 @@
-package vars
+package utils
 
 ///* 此文件用来打印信息 */
 //
