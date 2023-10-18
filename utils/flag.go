@@ -5,16 +5,16 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-var params = &vars.Params{}
+var Params = &vars.FlagParams{}
 
 func init() {
-	flag.StringVar(&params.ScanType, "type", "connect", "connect or syn scan type")
-	flag.StringVarP(&params.PortStr, "port", "p", "", "port to scan")
-	flag.StringVarP(&params.IpStr, "ip", "i", "", "ip to scan")
-	flag.IntVarP(&params.Thread, "thread", "t", 5000, "set thread value")
-	flag.IntVar(&params.TimeOut, "timeout", 3, "set timeout value")
+	flag.StringVar(&Params.ScanType, "type", "connect", "connect or syn scan type")
+	flag.StringVarP(&Params.PortStr, "port", "p", "", "port to scan")
+	flag.StringVarP(&Params.IpStr, "ip", "i", "", "ip to scan")
+	flag.IntVarP(&Params.Thread, "thread", "t", 5000, "set thread value")
+	flag.IntVar(&Params.TimeOut, "timeout", 3, "set timeout value")
 	//用bool来显示报错信息
-	flag.BoolVarP(&params.Help, "help", "h", false, "show help message")
-	flag.BoolVar(&params.Pn, "Pn", false, "disable ping")
+	flag.BoolVarP(&Params.Help, "help", "h", false, "show help message")
+	flag.BoolVar(&Params.Pn, "Pn", false, "disable ping")
 
 }

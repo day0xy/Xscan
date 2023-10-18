@@ -1,6 +1,6 @@
 package vars
 
-type Params struct {
+type FlagParams struct {
 	IpStr    string
 	PortStr  string
 	ScanType string
