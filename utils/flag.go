@@ -1,17 +1,20 @@
 package utils
 
-type Params struct {
-	ipStr    string
-	portStr  string
-	scanType string
+import (
+	"github.com/day0xy/Xscan/vars"
+	flag "github.com/spf13/pflag"
+)
 
-	//思路： 如果指定了值，就把结构体里的这两个值，赋值到connect和syn的结构体里去
-	thread  int
-	timeOut int
-	//思路： bool变量来看是否启用ping
-	Pn bool
-}
+var params = &vars.Params{}
 
 func init() {
+	flag.StringVar(&params.ScanType, "type", "connect", "connect or syn scan type")
+	flag.StringVarP(&params.PortStr, "port", "p", "", "port to scan")
+	flag.StringVarP(&params.IpStr, "ip", "i", "", "ip to scan")
+	flag.IntVarP(&params.Thread, "thread", "t", 5000, "set thread value")
+	flag.IntVar(&params.TimeOut, "timeout", 3, "set timeout value")
+	//用bool来显示报错信息
+	flag.BoolVarP(&params.Help, "help", "h", false, "show help message")
+	flag.BoolVar(&params.Pn, "Pn", false, "disable ping")
 
 }
