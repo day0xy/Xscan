@@ -2,7 +2,7 @@ package scan
 
 import "time"
 
-type synScanner struct {
+type SynScanner struct {
 	timeout     time.Duration
 	maxRoutines int
 }
