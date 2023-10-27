@@ -1,14 +1,12 @@
 package scan
 
-import "time"
-
 type SynScanner struct {
-	timeout time.Duration
+	timeout int
 	thread  int
 }
 
 // NewSynScanner 创建SynScanner
-func NewSynScanner(timeout time.Duration, thread int) *SynScanner {
+func NewSynScanner(timeout int, thread int) *SynScanner {
 	return &SynScanner{
 		timeout: timeout,
 		thread:  thread,
@@ -22,6 +20,6 @@ func (s *SynScanner) Start() error {
 }
 
 // Scan 实现的syn扫描函数
-func (s *SynScanner) Scan(ip string, port int, timeout time.Duration) {
+func (s *SynScanner) Scan(ip string, port int, timeout int) {
 
 }
