@@ -8,7 +8,7 @@ import (
 // Scanner 接口
 type Scanner interface {
 	Start(ctx context.Context, ip []string, port []int) (<-chan Result, <-chan error)
-	Scan(ctx context.Context, jobChan <-chan PortJob, resultChan chan<- Result, errChan chan<- error)
+	Scan(ctx context.Context, jobChan <-chan PortJob, results map[string]map[int]PortState, errChan chan<- error)
 }
 
 // CreateScanner 根据类型创建scanner

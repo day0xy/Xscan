@@ -12,6 +12,7 @@ type ConnectScanner struct {
 	timeout int
 	thread  int
 	ctx     context.Context
+	mutex   sync.Mutex
 }
 
 type PortJob struct {
@@ -45,6 +46,8 @@ func (s *ConnectScanner) Start(ctx context.Context, ip []string, port []int) (<-
 	resultChan := make(chan Result)
 	errChan := make(chan error)
 
+	results := make(map[string]map[int]PortState)
+
 	var wg sync.WaitGroup
 
 	// 创建并启动协程
@@ -52,7 +55,7 @@ func (s *ConnectScanner) Start(ctx context.Context, ip []string, port []int) (<-
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			s.Scan(ctx, jobChan, resultChan, errChan)
+			s.Scan(ctx, jobChan, results, errChan)
 		}()
 	}
 
@@ -73,15 +76,16 @@ func (s *ConnectScanner) Start(ctx context.Context, ip []string, port []int) (<-
 	// 等待所有的协程完成
 	go func() {
 		wg.Wait()
+		for ip, ports := range results {
+			resultChan <- Result{Host: ip, Ports: ports}
+		}
 		close(resultChan)
 	}()
 
 	return resultChan, errChan
 }
 
-func (s *ConnectScanner) Scan(ctx context.Context, jobChan <-chan PortJob, resultChan chan<- Result, errChan chan<- error) {
-	results := make(map[string]map[int]PortState)
-
+func (s *ConnectScanner) Scan(ctx context.Context, jobChan <-chan PortJob, results map[string]map[int]PortState, errChan chan<- error) {
 	for job := range jobChan {
 		state, err := s.ScanPort(job.ip, job.port)
 		if err != nil {
@@ -89,20 +93,12 @@ func (s *ConnectScanner) Scan(ctx context.Context, jobChan <-chan PortJob, resul
 			continue
 		}
 
+		s.mutex.Lock()
 		if _, ok := results[job.ip]; !ok {
 			results[job.ip] = make(map[int]PortState)
 		}
 		results[job.ip][job.port] = state
-	}
-
-	for ip, ports := range results {
-		result := Result{Host: ip, Ports: ports}
-
-		select {
-		case <-ctx.Done():
-			return
-		case resultChan <- result:
-		}
+		s.mutex.Unlock()
 	}
 }
 
@@ -129,8 +125,9 @@ func PrintResults(results <-chan Result, errs <-chan error) {
 				if state == PortOpen {
 					status = "open"
 				}
-				fmt.Printf("%s:%d is %s\n", result.Host, port, status)
+				fmt.Printf("%d is %s,\n", port, status)
 			}
+			fmt.Println()
 		case err, ok := <-errs:
 			if !ok {
 				return

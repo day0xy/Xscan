@@ -14,7 +14,6 @@ func main() {
 	if params.Help {
 		flag.PrintDefaults()
 	} else {
-
 		ctx, cancel := context.WithCancel(context.Background())
 		defer cancel()
 

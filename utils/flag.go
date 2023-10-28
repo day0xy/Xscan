@@ -23,7 +23,7 @@ func init() {
 	flag.StringVar(&Params.ScanType, "type", "connect", "connect or syn scan type")
 	flag.StringVarP(&Params.PortStr, "port", "p", "", "port to scan")
 	flag.StringVarP(&Params.IpStr, "ip", "i", "", "ip to scan")
-	flag.IntVarP(&Params.Thread, "thread", "t", 5000, "set thread value")
+	flag.IntVarP(&Params.Thread, "thread", "t", 50, "set thread value")
 	flag.IntVar(&Params.TimeOut, "timeout", 3, "set timeout value")
 
 }
