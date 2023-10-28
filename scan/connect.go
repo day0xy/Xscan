@@ -15,24 +15,6 @@ type ConnectScanner struct {
 	mutex   sync.Mutex
 }
 
-type PortJob struct {
-	ip   string
-	port int
-}
-
-type PortState uint8
-
-// 枚举类型
-const (
-	PortOpen PortState = iota
-	PortClosed
-)
-
-type Result struct {
-	Host  string
-	Ports map[int]PortState
-}
-
 // NewConnectScanner 初始化ConnectScanner
 func NewConnectScanner(timeout int, thread int) *ConnectScanner {
 	return &ConnectScanner{
@@ -109,30 +91,4 @@ func (s *ConnectScanner) ScanPort(ip string, port int) (PortState, error) {
 	}
 	conn.Close()
 	return PortOpen, nil
-}
-
-func PrintResults(results <-chan Result, errs <-chan error) {
-	for {
-		select {
-		case result, ok := <-results:
-			if !ok {
-				return
-			}
-
-			fmt.Printf("Target %s:\n", result.Host)
-			for port, state := range result.Ports {
-				status := "closed"
-				if state == PortOpen {
-					status = "open"
-				}
-				fmt.Printf("%d is %s,\n", port, status)
-			}
-			fmt.Println()
-		case err, ok := <-errs:
-			if !ok {
-				return
-			}
-			fmt.Println("Error:", err)
-		}
-	}
 }
