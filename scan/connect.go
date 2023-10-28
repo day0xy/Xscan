@@ -69,7 +69,7 @@ func (s *ConnectScanner) Start(ctx context.Context, ip []string, port []int) (<-
 
 func (s *ConnectScanner) Scan(ctx context.Context, jobChan <-chan PortJob, results map[string]map[int]PortState, errChan chan<- error) {
 	for job := range jobChan {
-		state, err := s.ScanPort(job.ip, job.port)
+		state, err := s.ScanPort(ctx, job.ip, job.port)
 		if err != nil {
 			errChan <- err
 			continue
@@ -84,8 +84,9 @@ func (s *ConnectScanner) Scan(ctx context.Context, jobChan <-chan PortJob, resul
 	}
 }
 
-func (s *ConnectScanner) ScanPort(ip string, port int) (PortState, error) {
-	conn, err := net.DialTimeout("tcp", fmt.Sprintf("%s:%d", ip, port), time.Duration(s.timeout)*time.Second)
+func (s *ConnectScanner) ScanPort(ctx context.Context, ip string, port int) (PortState, error) {
+	d := net.Dialer{Timeout: time.Duration(s.timeout) * time.Second}
+	conn, err := d.DialContext(ctx, "tcp", fmt.Sprintf("%s:%d", ip, port))
 	if err != nil {
 		return PortClosed, nil
 	}
