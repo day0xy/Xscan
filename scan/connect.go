@@ -122,6 +122,7 @@ func PrintResults(results <-chan Result, errs <-chan error) {
 			if !ok {
 				return
 			}
+
 			fmt.Printf("Target %s:\n", result.Host)
 			for port, state := range result.Ports {
 				status := "closed"

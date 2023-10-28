@@ -7,10 +7,7 @@ import (
 
 // Scanner 接口
 type Scanner interface {
-	// Start 思路： 用来启动工作池，实现并发
 	Start(ctx context.Context, ip []string, port []int) (<-chan Result, <-chan error)
-
-	// Scan 思路: 根据scanType来创建不同的scanner,调用不同scanner对象的Scan函数
 	Scan(ctx context.Context, jobChan <-chan PortJob, resultChan chan<- Result, errChan chan<- error)
 }
 
@@ -21,7 +18,6 @@ func CreateScanner(scanType string, timeout int, thread int) (Scanner, error) {
 		return NewConnectScanner(timeout, thread), nil
 	case "syn":
 		fmt.Println("under construction!")
-
 	}
 	return nil, fmt.Errorf("unknown scan type %s", scanType)
 }
