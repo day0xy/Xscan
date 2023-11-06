@@ -3,7 +3,6 @@ package scan
 import (
 	"context"
 	"fmt"
-	"os"
 )
 
 // Scanner 接口
@@ -20,10 +19,7 @@ func CreateScanner(scanType string, timeout int, thread int) (Scanner, error) {
 		return NewConnectScanner(timeout, thread), nil
 	case "syn":
 		return NewSynScanner(timeout, thread), nil
-	default:
-		fmt.Println("unknown type to scan!  use 'connect' or 'syn' ")
-		os.Exit(1)
-
+		//默认的话，就用os.Exit(1)来退出
 	}
 	return nil, fmt.Errorf("unknown scan type %s", scanType)
 }
