@@ -18,5 +18,7 @@ def tcp_connect_scan(target_ip, ports):
             print(f"Socket error on port {port}: {err}")
 
     # 打印扫描结果
+    print("Xscan Tcp-Connect scan result:")
+    print("PORT\tSTATE")
     for port, status in scan_results.items():
-        print(f"Port {port} is {status}")
+        print(f"{port}\t{status}")

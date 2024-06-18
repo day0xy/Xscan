@@ -1,7 +1,8 @@
+
 def parse_ports(port_str):
     ports = []
     # 分割字符串以处理多个端口或端口范围
-    port_parts = port_str.split(",")
+    port_parts = port_str[0].split(",")
     for part in port_parts:
         if "-" in part:
             # 处理端口范围
