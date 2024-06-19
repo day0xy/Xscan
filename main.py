@@ -5,8 +5,7 @@ from Scanner.TcpConnect import *
 from Scanner.TcpSyn import *
 from Scanner.Ping import *
 from Scanner.Udp import *
-
-# from Scanner.Fin import *
+from Scanner.TcpFin import *
 
 
 def main():
@@ -38,7 +37,8 @@ def main():
         ports = parse_ports(args.ports)
         udp_scan(target_ip, ports)
     elif scan_type == "fin":
-        fin_scan(target_ip)
+        ports = parse_ports(args.ports)
+        tcp_fin_scan(target_ip, ports)
     elif scan_type == "ping":
         ping(target_ip)
 
