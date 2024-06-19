@@ -31,6 +31,3 @@ def tcp_syn_scan(target_ip, ports):
                 response.getlayer(ICMP).code
             ) in [1, 2, 3, 9, 10, 13]:
                 print(f"{port}/tcp\tfiltered (ICMP response)")
-
-    print("----------------")
-    print(f"Open ports: {', '.join(map(str, open_ports))}")
